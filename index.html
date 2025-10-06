@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PUNPER - Máquinas CNC</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Variables CSS */
+    :root {
+      --amarillo: #FFD700;
+      --amarillo-oscuro: #FFC107;
+      --amarillo-claro: #f4f264;
+      --gris-oscuro: #333;
+      --gris-claro: #f5f5f5;
+      --sombra: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transicion: all 0.3s ease;
+    }
+
+    /* Reset y estilos base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: var(--amarillo-claro);
+      background-image: url("fondo1.jpg");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Encabezado y navegación */
+    .header {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-shadow: var(--sombra);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      width: 120px;
+      height: 70px;
+      margin-right: 15px;
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--gris-oscuro);
+    }
+
+    .idiomas {
+      display: flex;
+      gap: 10px;
+    }
+
+    .idiomas img {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      transition: var(--transicion);
+    }
+
+    .idiomas img:hover {
+      transform: scale(1.1);
+    }
+
+    /* Menú de navegación */
+    .nav-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--gris-oscuro);
+    }
+
+    nav {
+      display: flex;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--gris-oscuro);
+      background-color: var(--amarillo);
+      padding: 10px 20px;
+      margin: 0 5px;
+      border-radius: 10px;
+      transition: var(--transicion);
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      background-color: var(--amarillo-oscuro);
+      transform: translateY(-3px);
+    }
+
+    /* Contenido principal */
+    .main-content {
+      flex: 1;
+      padding: 120px 5% 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 1200px;
+      gap: 40px;
+    }
+
+    .texto {
+      flex: 1;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      box-shadow: var(--sombra);
+    }
+
+    .texto h1 {
+      color: var(--gris-oscuro);
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .texto h1:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 80px;
+      height: 4px;
+      background: var(--amarillo-oscuro);
+      border-radius: 2px;
+    }
+
+    .texto p {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+
+    .imagen {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .imagen img {
+      max-width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      transition: var(--transicion);
+    }
+
+    .imagen img:hover {
+      transform: scale(1.02);
+    }
+
+    /* Pie de página */
+    .footer {
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 30px 5%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .iconos {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin-bottom: 20px;
+    }
+
+    .iconos a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      background: var(--amarillo);
+      border-radius: 50%;
+      text-decoration: none;
+      transition: var(--transicion);
+    }
+
+    .iconos a:hover {
+      background: var(--amarillo-oscuro);
+      transform: translateY(-5px);
+    }
+
+    .iconos i {
+      font-size: 1.8rem;
+      color: var(--gris-oscuro);
+    }
+
+    .derechos {
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    /* Media Queries para Responsive */
+    @media (max-width: 992px) {
+      .container {
+        flex-direction: column;
+      }
+      
+      .texto, .imagen {
+        width: 90%;
+        max-width: 600px;
+      }
+      
+      .imagen {
+        margin-top: 20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        flex-wrap: wrap;
+        padding: 15px;
+      }
+      
+      .nav-toggle {
+        display: block;
+        order: 1;
+      }
+      
+      nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 15px;
+        order: 2;
+      }
+      
+      nav.show {
+        display: flex;
+      }
+      
+      nav a {
+        margin: 5px 0;
+        text-align: center;
+      }
+      
+      .idiomas {
+        margin-left: auto;
+        margin-right: 15px;
+      }
+      
+      .main-content {
+        padding-top: 160px;
+      }
+      
+      .texto h1 {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo {
+        width: 50px;
+        height: 50px;
+      }
+      
+      .logo-text {
+        font-size: 1.2rem;
+      }
+      
+      .idiomas img {
+        width: 25px;
+        height: 25px;
+      }
+      
+      .texto {
+        padding: 20px;
+      }
+      
+      .texto h1 {
+        font-size: 1.8rem;
+      }
+      
+      .texto p {
+        font-size: 1rem;
+      }
+      
+      .iconos a {
+        width: 50px;
+        height: 50px;
+      }
+      
+      .iconos i {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* Efectos adicionales */
+    .destacado {
+      color: var(--amarillo-oscuro);
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!-- Encabezado con logo y navegación -->
+  <header class="header">
+    <div class="logo-container">
+     <!-- <img class="logo" src="path3.png" alt="Logo de la empresa">  -->
+      <div class="logo-text">PUNPER</div>
+    </div>
+    
+    <button class="nav-toggle">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- aqui tenemos los iconos de idiomas
+    <div class="idiomas">
+      <img src="https://cdn-icons-png.flaticon.com/512/197/197386.png" alt="Español" title="Español">
+      <img src="https://cdn-icons-png.flaticon.com/512/197/197484.png" alt="Portugués" title="Português">
+      <img src="https://cdn-icons-png.flaticon.com/512/197/197484.png" alt="Inglés" title="English">
+    </div>
+    -->
+    <div class="nav-container">
+      <nav id="main-nav">
+        <a href="#"><i class="fas fa-home"></i> Principal</a>
+        <a href="quienes%20somos.html"><i class="fas fa-users"></i> Quienes somos</a>
+        <a href="productos.html"><i class="fas fa-cogs"></i> Productos</a>
+        <a href="formularioContacto.html"><i class="fas fa-envelope"></i> Contacto</a>
+      </nav>
+    </div>
+  </header>
+  
+  <!-- Contenido principal -->
+  <main class="main-content">
+    <div class="container">
+      <div class="texto">
+        <h1>Bienvenido a PUNPER</h1>
+        <p>En <span class="destacado">PUNPER</span> nos especializamos en la fabricación de máquinas de alta calidad, diseñadas para maximizar la eficiencia y garantizar la seguridad en cada operación.</p>
+        <p>Ofrecemos tecnología avanzada a precios competitivos, brindando soluciones confiables que impulsan la productividad de su negocio.</p>
+        <p>Nuestros productos incluyen:</p>
+        <ul>
+          <li>CNC Láser para corte y grabado en madera, acrilico, cuero, caucho, etc.;</li>
+          <li>CNC Plasma para metales con diferentes capacidades de corte;</li>
+          <li>Routers CNC para madera ...</li>
+        </ul>
+        <p>¡Con nosotros, la excelencia está al alcance de todos!</p>
+      </div>
+
+    <!-- Reemplaza el div .imagen actual por este código -->
+<div class="imagen">
+  <div class="carrusel">
+    <div class="slide fade">
+      <img src="CNC3laser8fondo.png" alt="Máquina CNC industrial 1">
+    </div>
+    <div class="slide fade">
+      <img src="CNC3laser3fondo.png" alt="Máquina CNC industrial 2">
+    </div>
+    <div class="slide fade">
+      <img src="CNC3laser7fondo.png" alt="Máquina CNC industrial 3">
+    </div>
+    <div class="slide fade">
+      <img src="CNC3laser2fondo.png" alt="Máquina CNC industrial 4">
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Estilos para el carrusel */
+  .carrusel {
+    position: relative;
+    max-width: 100%;
+    margin: auto;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    transition: opacity 1.5s ease;
+  }
+
+  .slide img {
+    width: 100%;
+    vertical-align: middle;
+    border-radius: 15px;
+  }
+
+  .fade {
+    animation-name: fade;
+    animation-duration: 1.5s;
+  }
+
+  @keyframes fade {
+    from {opacity: .4}
+    to {opacity: 1}
+  }
+
+  /* Puntos indicadores (opcional) */
+  .puntos {
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .punto {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .punto.activo {
+    background-color: var(--amarillo-oscuro);
+  }
+</style>
+
+<script>
+  // Script para el carrusel automático
+  let slideIndex = 0;
+  mostrarSlides();
+
+  function mostrarSlides() {
+    let i;
+    let slides = document.getElementsByClassName("slide");
+    let puntos = document.getElementsByClassName("punto");
+
+    for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";
+    }
+
+    slideIndex++;
+    if (slideIndex > slides.length) {slideIndex = 1}
+
+    for (i = 0; i < puntos.length; i++) {
+      puntos[i].className = puntos[i].className.replace(" activo", "");
+    }
+
+    slides[slideIndex-1].style.display = "block";
+    if (puntos.length > 0) {
+      puntos[slideIndex-1].className += " activo";
+    }
+
+    setTimeout(mostrarSlides, 3000); // Cambia cada 3 segundos
+  }
+</script>
+
+    </div>
+  </main>
+  
+  <!-- Pie de página -->
+  <footer class="footer">
+    <div class="iconos">
+      <a href="mailto:punpersoluciones@gmail.com"><i class="fas fa-envelope"></i></a>
+      <a href="https://www.tiktok.com/@punper_soluciones" target="_blank"><i class="fab fa-tiktok"></i></a>
+    </div>
+    
+    <div class="derechos">
+      <p>&copy; 2025 - Perú. Todos los derechos reservados.</p>
+      <p>Desarrollado con pasión por la innovación regional.</p>
+    </div>
+  </footer>
+  
+  <script>
+    // Menú móvil
+    document.querySelector('.nav-toggle').addEventListener('click', function() {
+      document.getElementById('main-nav').classList.toggle('show');
+    });
+    
+    // Animación al desplazarse
+    window.addEventListener('scroll', function() {
+      const header = document.querySelector('.header');
+      if (window.scrollY > 50) {
+        header.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.1)';
+        header.style.background = 'rgba(255, 255, 255, 0.98)';
+      } else {
+        header.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+        header.style.background = 'rgba(255, 255, 255, 0.95)';
+      }
+    });
+    
+    // Efecto hover para los enlaces del menú
+    const navLinks = document.querySelectorAll('nav a');
+    navLinks.forEach(link => {
+      link.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-3px)';
+      });
+      link.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+      });
+    });
+  </script>
+</body>
+</html>

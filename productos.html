@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos - PUNPER</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --amarillo: #FFD700;
+      --amarillo-oscuro: #FFC107;
+      --amarillo-claro: #f4f264;
+      --gris-oscuro: #333;
+      --gris-claro: #f5f5f5;
+      --sombra: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transicion: all 0.3s ease;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: var(--amarillo-claro);
+      background-image: url("fondo1.jpg");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #333;
+      line-height: 1.6;
+    }
+    .header {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 15px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-shadow: var(--sombra);
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+    .logo {
+      width: 120px;
+      height: 70px;
+      margin-right: 15px;
+    }
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--gris-oscuro);
+    }
+    .idiomas {
+      display: flex;
+      gap: 10px;
+    }
+    .idiomas img {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      transition: var(--transicion);
+    }
+    .idiomas img:hover {
+      transform: scale(1.1);
+    }
+    .nav-container {
+      display: flex;
+      align-items: center;
+    }
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--gris-oscuro);
+    }
+    nav {
+      display: flex;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--gris-oscuro);
+      background-color: var(--amarillo);
+      padding: 10px 20px;
+      margin: 0 5px;
+      border-radius: 10px;
+      transition: var(--transicion);
+      font-weight: 500;
+    }
+    nav a:hover {
+      background-color: var(--amarillo-oscuro);
+      transform: translateY(-3px);
+    }
+    .main-content {
+      flex: 1;
+      padding: 120px 5% 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto 40px auto;
+      background: rgba(255,255,255,0.95);
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: var(--sombra);
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .texto {
+      flex: 1 1 300px;
+      margin-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .galeria {
+      flex: 1 1 300px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      width: 100%;
+      margin-bottom: 0;
+      align-content: center;
+    }
+    h1 {
+      text-align: center;
+      color: var(--gris-oscuro);
+      margin-bottom: 20px;
+    }
+    .galeria {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .galeria a {
+      display: block;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+      background: #fff;
+      cursor: pointer;
+    }
+    .galeria a:hover {
+      transform: scale(1.04);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    }
+    .galeria img {
+      width: 100%;
+      height: 144px;
+      object-fit: cover;
+      display: block;
+      transition: box-shadow 0.2s;
+    }
+    /* Modal para agrandar imagen */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+      animation: fadein 0.2s;
+    }
+    .modal img {
+      max-width: 90vw;
+      max-height: 80vh;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      background: #fff;
+      padding: 10px;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-close {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      font-size: 2.5rem;
+      color: #fff;
+      cursor: pointer;
+      z-index: 2100;
+      background: none;
+      border: none;
+    }
+    @keyframes fadein {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    /* Media Queries para Responsive - MENÚ MÓVIL */
+    @media (max-width: 768px) {
+      .header {
+        flex-wrap: wrap;
+        padding: 15px;
+      }
+      
+      .nav-toggle {
+        display: block;
+        order: 1;
+      }
+      
+      nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 15px;
+        order: 2;
+      }
+      
+      nav.show {
+        display: flex;
+      }
+      
+      nav a {
+        margin: 5px 0;
+        text-align: center;
+        padding: 12px 15px;
+        font-size: 0.9rem;
+      }
+      
+      .idiomas {
+        margin-left: auto;
+        margin-right: 15px;
+      }
+      
+      .main-content {
+        padding-top: 160px;
+      }
+    }
+    
+    @media (max-width: 900px) {
+      .container {
+        max-width: 98vw;
+        padding: 20px 2vw;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .galeria img {
+        height: 70px;
+      }
+    }
+    @media (max-width: 600px) {
+      .main-content {
+        padding: 120px 2vw 60px;
+      }
+      .container {
+        padding: 10px 2vw;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .galeria {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .galeria img {
+        height: 60px;
+      }
+    }
+    @media (max-width: 400px) {
+      .galeria {
+        grid-template-columns: 1fr;
+      }
+      .galeria img {
+        height: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Encabezado con logo y navegación -->
+  <header class="header">
+    <div class="logo-container">
+      <div class="logo-text">PUNPER</div>
+    </div>
+    <button class="nav-toggle">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="nav-container">
+      <nav id="main-nav">
+        <a href="index.html"><i class="fas fa-home"></i> Principal</a>
+        <a href="quienes%20somos.html"><i class="fas fa-users"></i> Quienes somos</a>
+        <a href="productos.html"><i class="fas fa-cogs"></i> Productos</a>
+        <a href="formularioContacto.html"><i class="fas fa-envelope"></i> Contacto</a>
+      </nav>
+    </div>
+  </header>
+  <main class="main-content">
+    <div class="container">
+      <div class="texto">
+        <h1>Mesa CNC-Laser</h1>
+        <p>
+Modelo: CNCL1255-20W <p></p>
+Material: acero al carbono <p></p>
+Dimensiones: 1740 x 1530 x 1200 mm (Ancho x      	  	          Profundidad x Altura) <p></p>
+Área útil de trabajo: 1255 x 1255 mm <p></p>
+Máxima altura del eje Z: 170 mm <p></p>
+Voltaje de entrada: 220 V <p></p>
+Sistema de control:  MKS-DLC32 <p></p>
+Comunicación: WiFi y USB <p></p>
+Modulo Láser <p></p>
+Potencia de salida óptica: 20 W<p></p>
+Fuente de luz: Láser de diodo azul<p></p>
+Bomba de aire  <p></p>
+Flujo de aire: 25 LPM. </p>
+      </div>
+      <div class="galeria">
+        <a><img src="CNC3laser8fondo.png" alt="Producto 1"></a>
+        <a><img src="CNC3laser3fondo.png" alt="Producto 2"></a>
+        <a><img src="CNC3laser7fondo.png" alt="Producto 3"></a>
+        <a><img src="CNC3laser2fondo.png" alt="Producto 4"></a>
+
+      </div>
+    </div>
+    <div class="container">
+      <div class="texto">
+        <h1>Mesa CNC-Laser</h1>
+        <p>
+Modelo: CNCL1255-10W <p></p>
+Material: acero al carbono <p></p>
+Dimensiones: 1740 x 1530 x 50 mm (Ancho x      	  	          Profundidad x Altura) <p></p>
+Área útil de trabajo: 1255 x 1050 mm <p></p>
+Máxima altura del eje Z: 200 mm <p></p>
+Voltaje de entrada: 220 V <p></p>
+Sistema de control:  MKS-DLC32 <p></p>
+Comunicación: WiFi y USB <p></p>
+Modulo Láser <p></p>
+Potencia de salida óptica: 10 W<p></p>
+Fuente de luz: Láser de diodo azul<p></p>
+Bomba de aire  <p></p>
+Flujo de aire: 22 LPM. </p>
+      </div>
+      <div class="galeria">
+        <a><img src="CNC2laser1.png" alt="Accesorio 1"></a>
+        <a><img src="CNC2laser2.png" alt="Accesorio 2"></a>
+        <a><img src="IMG_20241112_100905005.jpg" alt="Accesorio 3"></a>
+        <a><img src="punper.png" alt="Accesorio 4"></a>
+        <a><img src="IMG_20241208_202045230_HDR.jpg" alt="Accesorio 3"></a>
+        <a><img src="IMG_20250121_183856615_HDR.jpg" alt="Accesorio 4"></a>
+        
+      </div>
+    </div>
+  </main>
+  <div class="modal" id="modal-img">
+    <button class="modal-close" id="modal-close">&times;</button>
+    <img src="" alt="Imagen ampliada" id="modal-image">
+  </div>
+  <script>
+    // Menú móvil igual que index
+    document.querySelector('.nav-toggle').addEventListener('click', function() {
+      document.getElementById('main-nav').classList.toggle('show');
+    });
+    // Cerrar menú al hacer click en un enlace en móvil
+    document.querySelectorAll('#main-nav a').forEach(link => {
+      link.addEventListener('click', function() {
+        if (window.innerWidth <= 768) {
+          document.getElementById('main-nav').classList.remove('show');
+        }
+      });
+    });
+    // Animación al desplazarse
+    window.addEventListener('scroll', function() {
+      const header = document.querySelector('.header');
+      if (window.scrollY > 50) {
+        header.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.1)';
+        header.style.background = 'rgba(255, 255, 255, 0.98)';
+      } else {
+        header.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+        header.style.background = 'rgba(255, 255, 255, 0.95)';
+      }
+    });
+    // Efecto hover para los enlaces del menú
+    const navLinks = document.querySelectorAll('nav a');
+    navLinks.forEach(link => {
+      link.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-3px)';
+      });
+      link.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+      });
+    });
+    // Modal de imagen
+    const modal = document.getElementById('modal-img');
+    const modalImg = document.getElementById('modal-image');
+    const modalClose = document.getElementById('modal-close');
+    document.querySelectorAll('.galeria img').forEach(img => {
+      img.addEventListener('click', function() {
+        modalImg.src = this.src;
+        modalImg.alt = this.alt;
+        modal.classList.add('active');
+      });
+    });
+    modalClose.addEventListener('click', function() {
+      modal.classList.remove('active');
+      modalImg.src = '';
+    });
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+        modalImg.src = '';
+      }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        modal.classList.remove('active');
+        modalImg.src = '';
+      }
+    });
+  </script>
+</body>
+</html>
